@@ -25,7 +25,7 @@ users = [
 
 flask_app = Flask(__name__)
 flask_app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
-flask_app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql+psycopg2://sample-python-api:1@35.232.87.105/sample-python-api' ## connect postgresql database
+flask_app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql+psycopg2://sample_python_api:1@35.232.87.105/sample_python_api' ## connect postgresql database
 flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True ## enable database debug logs
 flask_app.config['JWT_SECRET_KEY'] = 'super-secret'
 jwt = JWTManager(flask_app)
@@ -70,7 +70,7 @@ class UserLogin(Resource):
 
 @customer.route("/get/<int:id>", methods=['GET'])
 class Customer(Resource):
-	#@jwt_required
+	@jwt_required
 	def get(self, id):
 		try:
 			customer = Customers.query.filter(Customers.id == id).first()
@@ -135,7 +135,7 @@ class CustomerDelete(Resource):
 @customer.route("/add", methods=['PUT'])
 @customer.doc(params={'name': 'Customer\'s Name (char)', 'dob': 'Date of birthdate (format: %y-%m-%d)'})
 class CustomerAdd(Resource):
-	#@jwt_required
+	@jwt_required
 	def put(self):
 		try:
 			data = request.json
