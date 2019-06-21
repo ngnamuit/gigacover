@@ -13,3 +13,4 @@ pytz==2019.1
 six==1.12.0
 werkzeug==0.15.4
 flask-sqlalchemy==2.3.2
+flask_jwt_extended
