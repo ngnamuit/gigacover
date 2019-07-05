@@ -6,3 +6,4 @@ class Customers(db.Model):
 	name = db.Column(db.String(256), nullable=False)
 	dob = db.Column(db.Date)
 	updated_at = db.Column(db.DateTime)
+

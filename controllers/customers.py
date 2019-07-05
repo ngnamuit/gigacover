@@ -31,17 +31,19 @@ class Customer(Resource):
 			abort(400, str(e))
 
 
-@customer.route("/update/<int:id>", methods=['POST'])
-@customer.doc(params={'name': 'Customer\'s Name (char)', 'dob': 'Date of birthdate (format: %y-%m-%d)'})
+@customer.route("/update", methods=['POST'])
+@customer.doc(params={'id': 'Customer ID', 'name': 'Customer\'s Name (char)', 'dob': 'Date of birthdate (format: %y-%m-%d)'})
 class CustomerUpdate(Resource):
 	@jwt_required
-	def post(self, id):
+	def post(self):
 		try:
 			data = request.json
-			updated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-			customer = customer_model.query.filter(Customers.id == id).first()
+			if 'id' not in data and (not data.get('id', '') or isinstance(data['id'], int)):
+				return abort(400, {'message': 'Id is invalid'})
 			if 'name' not in data and 'dob' not in data:
 				return abort(400, {'message': 'Can not find name, dob payload '})
+			updated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+			customer = customer_model.query.filter(Customers.id == data['id']).first()
 			if not customer:
 				return abort(400, {'message': 'Can not find record in the system'})
 			if 'name' in data:
@@ -59,12 +61,15 @@ class CustomerUpdate(Resource):
 		except Exception as e:
 			abort(400, str(e))
 
-@customer.route("/delete/<int:id>", methods=['DELETE'])
+@customer.route("/delete", methods=['DELETE'])
+@customer.doc(params={'id': 'Customer ID'})
 class CustomerDelete(Resource):
 	@jwt_required
-	def delete(self, id):
+	def delete(self):
 		try:
-			customer = customer_model.query.filter(Customers.id == id).first()
+			if 'id' not in data and (not data.get('id', '') or isinstance(data['id'], int)):
+				return abort(400, {'message': 'Id is invalid'})
+			customer = customer_model.query.filter(Customers.id == data['id']).first()
 			if customer:
 				db.session.delete(customer)
 				db.session.commit()
