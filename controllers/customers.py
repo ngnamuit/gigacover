@@ -8,9 +8,11 @@ from flask_jwt_extended import (
 )
 from datetime import datetime
 from models.customers import Customers
+from config import db
 
 customer_model = Customers()
 customer = Namespace('customer', description='Customer')
+
 @customer.route("/get/<int:id>", methods=['GET'])
 class Customer(Resource):
 	@jwt_required
@@ -30,13 +32,13 @@ class Customer(Resource):
 		except Exception as e:
 			abort(400, str(e))
 
-
 @customer.route("/update", methods=['POST'])
 @customer.doc(params={'id': 'Customer ID', 'name': 'Customer\'s Name (char)', 'dob': 'Date of birthdate (format: %y-%m-%d)'})
 class CustomerUpdate(Resource):
 	@jwt_required
 	def post(self):
 		try:
+
 			data = request.json
 			if 'id' not in data and (not data.get('id', '') or isinstance(data['id'], int)):
 				return abort(400, {'message': 'Id is invalid'})
@@ -67,9 +69,10 @@ class CustomerDelete(Resource):
 	@jwt_required
 	def delete(self):
 		try:
+			data = request.json
 			if 'id' not in data and (not data.get('id', '') or isinstance(data['id'], int)):
 				return abort(400, {'message': 'Id is invalid'})
-			customer = customer_model.query.filter(Customers.id == data['id']).first()
+			customer = Customers.query.filter(Customers.id == data['id']).first()
 			if customer:
 				db.session.delete(customer)
 				db.session.commit()
@@ -87,12 +90,12 @@ class CustomerAdd(Resource):
 	def put(self):
 		try:
 			data = request.json
-			name = data.get('name','')
-			dob = data.get('dob','')
+			name = data.get('name', '')
+			dob = data.get('dob', '')
 			updated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 			if not name:
 				return {'message': 'name is required'}
-			customer = customer_model(name="%s"%(name), dob="%s"%(dob), updated_at="%s"%(updated_at))
+			customer = Customers(name="%s"%(name), dob="%s"%(dob), updated_at="%s"%(updated_at))
 			db.session.add(customer)
 			db.session.commit()
 			return {
