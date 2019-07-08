@@ -5,7 +5,7 @@ It provides a UI manage routing and JWT for authentication requests.
 
 # INSTALLING
 ### Local environment
-You need to install postgreSQL and create a database before or you can install these easily 
+You need to install postgreSQL and create a database before or you can install these easily
 by following this [site](https://www.linode.com/docs/databases/postgresql/how-to-install-postgresql-on-ubuntu-16-04/).
 
 Then you must to modify the config.ini file.
@@ -21,7 +21,7 @@ Install dependencies.
 ```bash
     pip install -r requirements.txt
 ```
-Run app 
+Run app
 ```bash
     FLASK_APP=app.py flask run
 ```
@@ -56,7 +56,7 @@ sudo apt-get install nginx supervisor
 ```
 [program:sample_python_api]
 directory=/home/ubuntu/sample_python_api
-command=/home/ubuntu/.env/bin/gunicorn gunicorn --workers=5 test:app app:flask_app -b 127.0.0.1:8000
+command=/home/ubuntu/.env/bin/gunicorn --workers=5 app:flask_app -b 0.0.0.0:8000
 autostart=true
 autorestart=true
 stderr_logfile=/var/log/sample_python_api/sample_python_api.err.log
@@ -82,7 +82,7 @@ server {
     server_name  your_public_dnsname_here;
 
     location / {
-        proxy_pass http://127.0.0.1:8000;
+        proxy_pass http://0.0.0.0:8000;
     }
 }
 ```
@@ -111,5 +111,5 @@ Open your_public_dnsname in a browser.
 - Update a customer api
 [![Screenshot](https://i.imgur.com/uFDkxPH.png)](sample-python-api)
 
-- When your JWT  has expired or incorrect: 
+- When your JWT  has expired or incorrect:
 [![Screenshot](https://i.imgur.com/Dz0F16G.png)](sample-python-api)
