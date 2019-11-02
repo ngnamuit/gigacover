@@ -3,7 +3,7 @@ attrs==19.1.0
 click==7.0
 flask-restplus==0.12.1
 flask==1.0.3
-gunicorn==19.3.0
+gunicorn==19.5.0
 itsdangerous==1.1.0
 jinja2==2.10.1
 jsonschema==3.0.1
